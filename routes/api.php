@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+/*Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
-});
+});*/
+
+Route::get('/calendar/create', 'CalendarController@create');
+Route::post('/calendar', 'CalendarController@store');
+Route::get('/calendar/show', 'CalendarController@show');
+Route::get('/calendar/{id}/edit', 'CalendarController@edit');
+Route::put('/calendar/{id}', 'CalendarController@update');
+Route::delete('/calendar', 'CalendarController@destroy');
