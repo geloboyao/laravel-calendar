@@ -13,6 +13,12 @@
       #app {
         margin-top: 10px;
       }
+      .calendar-day {
+        border-bottom: 1px #E5E5E5 solid;
+      }
+      .calendar-day:first-child {
+        border-top: 1px #E5E5E5 solid;
+      }
     </style>
 
     <script>

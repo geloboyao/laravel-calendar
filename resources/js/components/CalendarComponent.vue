@@ -29,7 +29,6 @@
                       <event-component
                         v-for="day in days"
                         v-bind="day"
-                        :key="day.id"
                       ></event-component>
                     </div>
                   </div>
@@ -46,11 +45,12 @@
 <script>
   import EventComponent from './EventComponent.vue';
 
-  function Day({id, day, date, is_event}) {
+  function Day({id, day, date, is_event, event_name}) {
     this.id = id;
     this.day = day;
     this.date = date;
     this.is_event = is_event;
+    this.event_name = event_name;
   }
 
   export default {
@@ -68,7 +68,6 @@
         const { data } = await window.axios.get('/api/calendar/show');
         data.forEach(day => this.days.push(new Day(day)));
         this.days.forEach(day => console.log(day));
-        // console.log(this.days);
       },
       async update(id, first_name, last_name, email) {
         this.mute = true;

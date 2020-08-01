@@ -1973,18 +1973,19 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 //
 //
-//
 
 
 function Day(_ref) {
   var id = _ref.id,
       day = _ref.day,
       date = _ref.date,
-      is_event = _ref.is_event;
+      is_event = _ref.is_event,
+      event_name = _ref.event_name;
   this.id = id;
   this.day = day;
   this.date = date;
   this.is_event = is_event;
+  this.event_name = event_name;
 }
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -2020,8 +2021,7 @@ function Day(_ref) {
 
                 _this.days.forEach(function (day) {
                   return console.log(day);
-                }); // console.log(this.days);
-
+                });
 
               case 6:
               case "end":
@@ -2114,6 +2114,14 @@ function Day(_ref) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -38498,7 +38506,7 @@ var render = function() {
                       _vm._l(_vm.days, function(day) {
                         return _c(
                           "event-component",
-                          _vm._b({ key: day.id }, "event-component", day, false)
+                          _vm._b({}, "event-component", day, false)
                         )
                       }),
                       1
@@ -38559,9 +38567,28 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "day" }, [
-    _vm._v("\n  " + _vm._s(_vm.date) + " " + _vm._s(_vm.day) + "\n")
-  ])
+  return _c(
+    "div",
+    {
+      staticClass: "calendar-day col-md-12 row",
+      class: { "bg-success text-white": _vm.is_event }
+    },
+    [
+      _c("div", { staticClass: "col-md-4" }, [
+        _c("span", { staticClass: "event-date" }, [_vm._v(_vm._s(_vm.date))]),
+        _vm._v(" "),
+        _c("span", { staticClass: "event-day" }, [_vm._v(_vm._s(_vm.day))])
+      ]),
+      _vm._v(" "),
+      _c("div", { staticClass: "col-md-8" }, [
+        _vm.is_event
+          ? _c("span", { staticClass: "event-name" }, [
+              _vm._v(_vm._s(_vm.event_name))
+            ])
+          : _c("span", [_vm._v(" ")])
+      ])
+    ]
+  )
 }
 var staticRenderFns = []
 render._withStripped = true
