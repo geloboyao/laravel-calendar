@@ -161,7 +161,6 @@
     },
     methods: {
       async read() {
-        moment('timezone', 'UTC');
         const { data } = await window.axios.get('/api/calendar/show');
 
         for (var i = 0; i < data['dates'].length; i++) {
@@ -171,8 +170,8 @@
 
         this.$set(this, 'event_name', data['event_name']);
         this.$set(this, 'event_day', data['event_day']);
-        this.$set(this, 'event_from', moment(data['event_from']).format('YYYY-MM-DD'));
-        this.$set(this, 'event_to', moment(data['event_to']).format('YYYY-MM-DD'));
+        this.$set(this, 'event_from', new Date(data['event_from']));
+        this.$set(this, 'event_to', new Date(data['event_to']));
       },
       async update(event_name, event_day, event_from, event_to) {
         var days = JSON.stringify(event_day);

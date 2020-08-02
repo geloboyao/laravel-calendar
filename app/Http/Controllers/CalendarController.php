@@ -54,7 +54,10 @@ class CalendarController extends Controller
             if ($count > 0)
             {
                 if (
-                    $day->gte(Carbon::createFromDate($event->from)->format('Y-m-d'))
+                    (
+                        $day->gt(Carbon::createFromDate($event->from)->format('Y-m-d'))
+                        || $day->format('Y-m-d') == Carbon::createFromDate($event->from)->format('Y-m-d')
+                    )
                     && (
                         $day->lt(Carbon::createFromDate($event->to)->format('Y-m-d'))
                         || $day->format('Y-m-d') == Carbon::createFromDate($event->to)->format('Y-m-d')

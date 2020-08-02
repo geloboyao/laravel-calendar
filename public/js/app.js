@@ -2114,11 +2114,10 @@ function Day(_ref) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                moment_timezone__WEBPACK_IMPORTED_MODULE_5___default()('timezone', 'UTC');
-                _context.next = 3;
+                _context.next = 2;
                 return window.axios.get('/api/calendar/show');
 
-              case 3:
+              case 2:
                 _yield$window$axios$g = _context.sent;
                 data = _yield$window$axios$g.data;
 
@@ -2132,11 +2131,11 @@ function Day(_ref) {
 
                 _this.$set(_this, 'event_day', data['event_day']);
 
-                _this.$set(_this, 'event_from', moment_timezone__WEBPACK_IMPORTED_MODULE_5___default()(data['event_from']).format('YYYY-MM-DD'));
+                _this.$set(_this, 'event_from', new Date(data['event_from']));
 
-                _this.$set(_this, 'event_to', moment_timezone__WEBPACK_IMPORTED_MODULE_5___default()(data['event_to']).format('YYYY-MM-DD'));
+                _this.$set(_this, 'event_to', new Date(data['event_to']));
 
-              case 10:
+              case 9:
               case "end":
                 return _context.stop();
             }
