@@ -15,6 +15,7 @@
       }
       .calendar-day {
         border-bottom: 1px #E5E5E5 solid;
+        padding: 10px;
       }
       .calendar-day:first-child {
         border-top: 1px #E5E5E5 solid;
