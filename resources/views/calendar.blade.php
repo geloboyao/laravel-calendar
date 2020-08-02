@@ -20,6 +20,17 @@
       .calendar-day:first-child {
         border-top: 1px #E5E5E5 solid;
       }
+      .mx-datepicker {
+        position: inherit !important;
+        display: inherit !important;
+        width: auto !important;
+      }
+      .mx-icon-calendar {
+        display: none;
+      }
+      .date-to {
+        margin-left: 15px;
+      }
     </style>
 
     <script>

@@ -1,5 +1,8 @@
 <template>
-  <div class="calendar-day col-md-12 row" v-bind:class="{ 'bg-success text-white' : is_event }">
+  <div
+    class="calendar-day col-md-12 row"
+    v-bind:class="{ 'bg-success text-white' : is_event }"
+  >
     <div class="col-md-4">
       <span class="event-date">{{ date }}</span>
       <span class="event-day">{{ day }}</span>

@@ -23,37 +23,45 @@
                           </p>
 
                           <div class="col-md-12 row">
-                            <div class="form-group">
-                              <label for="event-name">Event Name</label>
-                              <input id="event-name" class="form-control" name="event_name" v-model="event_name" placeholder="Event Name">
-                            </div>
+                            <label for="event-name">Event Name</label>
+                            <input
+                              id="event-name"
+                              class="form-control"
+                              name="event_name"
+                              v-model="event_name"
+                              placeholder="Event Name"
+                            >
                           </div>
 
                           <div class="col-md-6 row">
                             <div class="form-group">
                               <label for="event-from">From</label>
-                              <input id="event-from" class="form-control" name="event_from" v-model="event_from">
-                              <!-- <functional-calendar v-model="this.event_from" :configs="this.calendarConfigs">
-                                <template v-slot:datePickerInput="props">
-                                  <div>
-                                    <input id="event-from" class="form-control" name="event_from" readonly="true">
-                                  </div>
-                                </template>
-                              </functional-calendar> -->
+                              <date-picker
+                                v-model="event_from"
+                                format="YYYY-MM-DD"
+                                :editable="false"
+                                :disabled-date="date_range"
+                                :default-value="event_from"
+                                :type="'date'"
+                                :clearable="false"
+                                :input-class="'form-control'"
+                              ></date-picker>
                             </div>
                           </div>
 
-                          <div class="col-md-6 row">
+                          <div class="col-md-6 row date-to">
                             <div class="form-group">
                               <label for="event-to">To</label>
-                              <input id="event-to" class="form-control" name="event_to" v-model="event_to">
-                              <!-- <functional-calendar v-model="this.event_to" :configs="this.calendarConfigs">
-                                <template v-slot:datePickerInput="props">
-                                  <div>
-                                    <input id="event-to" class="form-control" name="event_to" readonly="true">
-                                  </div>
-                                </template>
-                              </functional-calendar> -->
+                              <date-picker
+                                v-model="event_to"
+                                format="YYYY-MM-DD"
+                                :editable="false"
+                                :disabled-date="date_range"
+                                :default-value="event_to"
+                                :type="'date'"
+                                :clearable="false"
+                                :input-class="'form-control'"
+                              ></date-picker>
                             </div>
                           </div>
 
@@ -116,11 +124,18 @@
 
 <script>
   import EventComponent from './EventComponent.vue';
-  import { FunctionalCalendar } from 'vue-functional-calendar';
+  import DatePicker from 'vue2-datepicker';
   import VueToast from 'vue-toast-notification';
+  import VueMoment from 'vue-moment'
+  import moment from 'moment-timezone'
+
+  import 'vue2-datepicker/index.css';
   import 'vue-toast-notification/dist/theme-default.css';
 
   Vue.use(VueToast);
+  Vue.use(VueMoment, {
+    moment
+  });
 
   function Day({id, day, date, is_event, event_name}) {
     this.id = id;
@@ -138,67 +153,15 @@
       return {
         days: [],
         event_name: '',
-        /*event_from: {
-          selectedDates: [],
-          selectedDate: false,
-          selectedDateTime: false,
-          selectedHour: '00',
-          selectedMinute: '00',
-          selectedDatesItem: '',
-          dateRange: {
-            'start': {
-              'date': false,
-              'dateTime': false,
-              'hour': '00',
-              'minute': '00'
-            },
-            'end': {
-              'date': false,
-              'dateTime': false,
-              'hour': '00',
-              'minute': '00'
-            }
-          }
-        },
-        event_to: {
-          selectedDates: [],
-          selectedDate: false,
-          selectedDateTime: false,
-          selectedHour: '00',
-          selectedMinute: '00',
-          selectedDatesItem: '',
-          dateRange: {
-            'start': {
-              'date': false,
-              'dateTime': false,
-              'hour': '00',
-              'minute': '00'
-            },
-            'end': {
-              'date': false,
-              'dateTime': false,
-              'hour': '00',
-              'minute': '00'
-            }
-          }
-        },*/
         event_from: '',
         event_to: '',
         event_day: {},
-        errors: [],
-        calendarConfigs: {
-          dateFormat: 'mm/dd/yyyy',
-          sundayStart: true,
-          isDatePicker: true,
-          isModal: true,
-          limits: {min: '08/01/2020', max: '08/31/2020'}
-        },
+        errors: []
       }
     },
     methods: {
       async read() {
-        // this.event_from.selectedDates = [];
-        // this.event_to.selectedDates = [];
+        moment('timezone', 'UTC');
         const { data } = await window.axios.get('/api/calendar/show');
 
         for (var i = 0; i < data['dates'].length; i++) {
@@ -208,11 +171,8 @@
 
         this.$set(this, 'event_name', data['event_name']);
         this.$set(this, 'event_day', data['event_day']);
-        this.$set(this, 'event_from', data['event_from']);
-        this.$set(this, 'event_to', data['event_to']);
-
-        // this.event_from.selectedDates.push({'date': data['event_from'], 'dateTime': false});
-        // this.event_to.selectedDates.push({'date': data['event_to'], 'dateTime': false});
+        this.$set(this, 'event_from', moment(data['event_from']).format('YYYY-MM-DD'));
+        this.$set(this, 'event_to', moment(data['event_to']).format('YYYY-MM-DD'));
       },
       async update(event_name, event_day, event_from, event_to) {
         var days = JSON.stringify(event_day);
@@ -230,7 +190,12 @@
       async submitForm(e) {
         this.validate();
 
-        this.update(this.event_name, this.event_day, this.event_from, this.event_to);
+        var event_from = moment(this.event_from).format('YYYY-MM-DD');
+        var event_to = moment(this.event_to).format('YYYY-MM-DD');
+
+        if (this.errors.length < 1) {
+          this.update(this.event_name, this.event_day, event_from, event_to);
+        }
       },
       async validate() {
         this.errors = [];
@@ -251,9 +216,21 @@
           this.errors.push('Event To Date required');
         }
 
+        var date_to = new Date(this.event_to);
+        var date_from = new Date(this.event_from);
+
+        if (date_from > date_to) {
+          this.errors.push('Event To must be greater than Event From');
+        }
+
         if (this.errors.length) {
           e.preventDefault();
         }
+      },
+      date_range(date) {
+        const start = new Date('2020-07-31');
+
+        return date < start || date > new Date('2020-08-31');
       }
     },
     created() {
@@ -261,7 +238,7 @@
     },
     components: {
       EventComponent,
-      FunctionalCalendar
+      DatePicker
     }
   }
 </script>
