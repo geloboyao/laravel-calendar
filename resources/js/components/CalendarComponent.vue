@@ -117,6 +117,10 @@
 <script>
   import EventComponent from './EventComponent.vue';
   import { FunctionalCalendar } from 'vue-functional-calendar';
+  import VueToast from 'vue-toast-notification';
+  import 'vue-toast-notification/dist/theme-default.css';
+
+  Vue.use(VueToast);
 
   function Day({id, day, date, is_event, event_name}) {
     this.id = id;
@@ -214,6 +218,12 @@
         var days = JSON.stringify(event_day);
 
         await window.axios.put(`/api/calendar/1`, { event_name, days, event_from, event_to });
+
+        let toast = Vue.$toast.open({
+          message: 'Event successfully updated.',
+          type: 'success',
+          position: 'top-right'
+        });
 
         this.read();
       },
